@@ -1,0 +1,145 @@
+uint16_t x, y, mode, clamp;
+
+void adc_init(void)
+{
+  ADCSRA |= (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); //ENABLE ADC, PRESCALER 128
+  ADMUX &= ~((1 << REFS0) | (1 << REFS1)); //PC0, ARef AS REFERENCE VOLTAGE 3.3v
+}
+
+uint16_t adc_read(uint8_t ch)
+{
+  ch &= 0b00000111;       //ANDing to limit input to 7
+  ADMUX = (ADMUX & 0xf8) | ch; //Clear last 3 bits of ADMUX, OR with ch
+  ADCSRA |= (1 << ADSC);    //START CONVERSION
+  while ((ADCSRA) & (1 << ADSC)); //WAIT UNTIL CONVERSION IS COMPLETE
+  return (ADC);       //RETURN ADC VALUE
+}
+
+int const D1 = 10, D2 = 11, D3 = 12, D4 = 13, modeSw = 9, clampSw = 8;
+
+void setup() {
+  pinMode(D1, OUTPUT);
+  pinMode(D2, OUTPUT);
+  pinMode(D3, OUTPUT);
+  pinMode(D4, OUTPUT);
+  pinMode(modeSw, INPUT);
+  pinMode(clampSw, INPUT);
+  adc_init();         //INITIALIZE ADC
+
+}
+
+void loop() {
+
+  x = adc_read(0);    //READ ADC VALUE FROM CHANNEL 0 A0 in nano
+  y = adc_read(1);    //READ ADC VALUE FROM CHANNEL 1 A1 in nano
+  mode = digitalRead(modeSw);
+  clamp = digitalRead(clampSw);
+  digitalWrite(D4, clamp);
+
+  while (mode == 0)  //motor
+  {
+    x = adc_read(0);    //READ ADC VALUE FROM CHANNEL 0 A0 in nano
+    y = adc_read(1);    //READ ADC VALUE FROM CHANNEL 1 A1 in nano
+
+    mode = digitalRead(modeSw);
+    clamp = digitalRead(clampSw);
+    digitalWrite(D4, clamp);
+
+
+    if (x < 450) //LEFT
+    {
+      digitalWrite(D3, LOW);
+      digitalWrite(D2, LOW);
+      digitalWrite(D1, HIGH);
+    }
+    else if (x > 540) //RIGHT
+    {
+      digitalWrite(D3, LOW);
+      digitalWrite(D2, HIGH);
+      digitalWrite(D1, LOW);
+
+    }
+    else
+    {
+
+    }
+
+    if (y > 540)  //forward
+    {
+      digitalWrite(D3, LOW);
+      digitalWrite(D2, HIGH);
+      digitalWrite(D1, HIGH);
+
+    }
+    else if (y < 400) //reverse
+    {
+      digitalWrite(D3, HIGH);
+      digitalWrite(D2, LOW);
+      digitalWrite(D1, LOW);
+
+    }
+    else
+    {
+
+    }
+    if ((x > 450 && x < 540) && (y < 540 && y > 400))   //stable
+    {
+      digitalWrite(D3, LOW);
+      digitalWrite(D2, LOW);
+      digitalWrite(D1, LOW);
+
+    }
+
+  }
+
+  while (mode == 1)  //servo
+  {
+    x = adc_read(0);    //READ ADC VALUE FROM CHANNEL 0 A0 in nano
+    y = adc_read(1);    //READ ADC VALUE FROM CHANNEL 1 A1 in nano
+    mode = digitalRead(modeSw);
+    clamp = digitalRead(clampSw);
+    digitalWrite(D4, clamp);
+
+    if (x < 450)  //left
+    {
+      digitalWrite(D3, HIGH);
+      digitalWrite(D2, LOW);
+      digitalWrite(D1, HIGH);
+
+    }
+    else if (x > 540) //right
+    {
+      digitalWrite(D3, HIGH);
+      digitalWrite(D2, HIGH);
+      digitalWrite(D1, LOW);
+
+    }
+    else
+    {
+
+    }
+
+    if (y > 540)  //down
+    {
+      digitalWrite(D3, HIGH);
+      digitalWrite(D2, HIGH);
+      digitalWrite(D1, HIGH);
+      Serial.print("SD");
+
+    }
+    else
+    {
+
+    }
+    if ((x > 450 && x < 540) && (y < 540 && y > 400)) //stable
+    {
+      digitalWrite(D3, LOW);
+      digitalWrite(D2, LOW);
+      digitalWrite(D1, LOW);
+      Serial.print("ST");
+
+    }
+
+  }
+
+}

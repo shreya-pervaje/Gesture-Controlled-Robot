@@ -1,4 +1,5 @@
-#include &lt;Servo.h&gt;
+#include <Servo.h>
+
 Servo servoB;
 Servo servoV;
 Servo servoC;
@@ -6,251 +7,293 @@ int const servoMotorB = 3;
 int const servoMotorV = 5;
 int const servoMotorC = 6;
 static int angleB = 90, angleV = 180;
+
 int const leftR = 10, leftB = 11, rightR = 12, rightB = 13;
 int const D1 = 4, D2 = 7, D3 = 8, D4 = 9;
 uint8_t dec1, dec2, dec3, dec4;
 int flag;
+
 void setup() {
-pinMode(leftR, OUTPUT);
-pinMode(leftB, OUTPUT);
-pinMode(rightR, OUTPUT);
-pinMode(rightB, OUTPUT);
-pinMode(D1, INPUT);
-pinMode(D2, INPUT);
-pinMode(D3, INPUT);
-pinMode(D4, INPUT);
-servoB.attach(servoMotorB);
-servoV.attach(servoMotorV);
-servoC.attach(servoMotorC);
-servoB.write(90);
-servoV.write(180);
-servoC.write(110);
-delay(50);
+  pinMode(leftR, OUTPUT);
+  pinMode(leftB, OUTPUT);
+  pinMode(rightR, OUTPUT);
+  pinMode(rightB, OUTPUT);
+
+  pinMode(D1, INPUT);
+  pinMode(D2, INPUT);
+  pinMode(D3, INPUT);
+  pinMode(D4, INPUT);
+
+  servoB.attach(servoMotorB);
+  servoV.attach(servoMotorV);
+  servoC.attach(servoMotorC);
+  servoB.write(90);
+  servoV.write(180);
+  servoC.write(110);
+  delay(50);
+
 }
+
 void loop() {
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-//MOTOR
-//forward
-while (dec3 == LOW &amp;&amp; dec2 == HIGH &amp;&amp; dec1 == HIGH)
-{
 
-digitalWrite(rightR, LOW);
-digitalWrite(rightB, HIGH);
+  dec1 = digitalRead(D1);
+  dec2 = digitalRead(D2);
+  dec3 = digitalRead(D3);
+  dec4 = digitalRead(D4);
 
-digitalWrite(leftR, HIGH);
-digitalWrite(leftB, LOW);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-delay(100);
-}
-//right
-while (dec3 == LOW &amp;&amp; dec2 == HIGH &amp;&amp; dec1 == LOW)
-{
+  //MOTOR
+  //forward
+  while (dec3 == LOW && dec2 == HIGH && dec1 == HIGH)
+  {
+    digitalWrite(rightR, LOW);
+    digitalWrite(rightB, HIGH);
+    digitalWrite(leftR, HIGH);
+    digitalWrite(leftB, LOW);
 
-digitalWrite(rightR, HIGH);
-digitalWrite(rightB, LOW);
-digitalWrite(leftR, HIGH);
-digitalWrite(leftB, LOW);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
+    //clamp close
+    if (dec4 == HIGH)
+    {
 
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//left
-while (dec4 == LOW &amp;&amp; dec3 == LOW &amp;&amp; dec2 == LOW &amp;&amp; dec1 == HIGH )
-{
+      servoC.write(0);
+      delay(30);
+    }
 
-digitalWrite(rightR, LOW);
-digitalWrite(rightB, HIGH);
-digitalWrite(leftR, LOW);
-digitalWrite(leftB, HIGH);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//REVERSE
-while (dec3 == HIGH &amp;&amp; dec2 == LOW &amp;&amp; dec1 == LOW)
-{
+    //clamp open
+    if (dec4 == LOW )
+    {
+      servoC.write(110);
+      delay(30);
+    }
 
-digitalWrite(rightR, HIGH);
-digitalWrite(rightB, LOW);
-digitalWrite(leftR, LOW);
-digitalWrite(leftB, HIGH);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+    delay(100);
+  }
 
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//Stable
-while (dec3 == LOW &amp;&amp; dec2 == LOW &amp;&amp; dec1 == LOW)
-{
-digitalWrite(rightR, LOW);
-digitalWrite(rightB, LOW);
-digitalWrite(leftR, LOW);
-digitalWrite(leftB, LOW);
-angleV = angleV + 1;
-if (angleV &gt;= 180)
-{
-angleV = 180;
-}
-servoV.write(angleV);
-delay(30);
+  //right
+  while (dec3 == LOW && dec2 == HIGH && dec1 == LOW)
+  {
+    digitalWrite(rightR, HIGH);
+    digitalWrite(rightB, LOW);
+    digitalWrite(leftR, HIGH);
+    digitalWrite(leftB, LOW);
 
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
+    //clamp close
+    if (dec4 == HIGH)
+    {
+      servoC.write(0);
+      delay(30);
+    }
 
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//Servo
-//arm left
-while (dec3 == HIGH &amp;&amp; dec2 == LOW &amp;&amp; dec1 == HIGH )
-{
-angleB = angleB + 2;
-if (angleB &gt;= 180)
-{
-angleB = 180;
-}
-servoB.write(angleB);
-delay(30);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//arm right
-while (dec3 == HIGH &amp;&amp; dec2 == HIGH &amp;&amp; dec1 == LOW )
-{
-angleB = angleB - 2;
-if (angleB &lt;= 0)
-{
-angleB = 0;
-}
-servoB.write(angleB);
-delay(30);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
+    //clamp open
+    if (dec4 == LOW )
+    {
+      servoC.write(110);
+      delay(30);
+    }
 
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
-//arm down
-while (dec3 == HIGH &amp;&amp; dec2 == HIGH &amp;&amp; dec1 == HIGH )
-{
-angleV = angleV - 1;
-if (angleV &lt;= 110)
-{
-angleV = 110;
-}
-servoV.write(angleV);
-delay(30);
-//clamp close
-if (dec4 == HIGH)
-{
-servoC.write(0);
-delay(30);
-}
-//clamp open
-if (dec4 == LOW )
-{
-servoC.write(110);
-delay(30);
-}
-dec1 = digitalRead(D1);
-dec2 = digitalRead(D2);
-dec3 = digitalRead(D3);
-dec4 = digitalRead(D4);
-}
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+
+  }
+
+  //left
+  while (dec4 == LOW && dec3 == LOW && dec2 == LOW && dec1 == HIGH )
+  {
+    digitalWrite(rightR, LOW);
+    digitalWrite(rightB, HIGH);
+    digitalWrite(leftR, LOW);
+    digitalWrite(leftB, HIGH);
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+
+  }
+
+  //REVERSE
+  while (dec3 == HIGH && dec2 == LOW && dec1 == LOW)
+  {
+    digitalWrite(rightR, HIGH);
+    digitalWrite(rightB, LOW);
+    digitalWrite(leftR, LOW);
+    digitalWrite(leftB, HIGH);
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+
+  }
+  //Stable
+  while (dec3 == LOW && dec2 == LOW && dec1 == LOW)
+  {
+    digitalWrite(rightR, LOW);
+    digitalWrite(rightB, LOW);
+    digitalWrite(leftR, LOW);
+    digitalWrite(leftB, LOW);
+
+    angleV = angleV + 1;
+    if (angleV >= 180)
+    {
+      angleV = 180;
+    }
+    servoV.write(angleV);
+    delay(30);
+
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+
+  }
+
+  //Servo
+  //arm left
+  while (dec3 == HIGH && dec2 == LOW && dec1 == HIGH )
+  {
+    angleB = angleB + 2;
+    if (angleB >= 180)
+    {
+      angleB = 180;
+    }
+    servoB.write(angleB);
+    delay(30);
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+
+  }
+  //arm right
+  while (dec3 == HIGH && dec2 == HIGH && dec1 == LOW )
+  {
+    angleB = angleB - 2;
+    if (angleB <= 0)
+    {
+      angleB = 0;
+    }
+    servoB.write(angleB);
+    delay(30);
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+  }
+
+  //arm down
+  while (dec3 == HIGH && dec2 == HIGH && dec1 == HIGH )
+  {
+    angleV = angleV - 1;
+    if (angleV <= 110)
+    {
+      angleV = 110;
+    }
+    servoV.write(angleV);
+    delay(30);
+
+    //clamp close
+    if (dec4 == HIGH)
+    {
+      servoC.write(0);
+      delay(30);
+    }
+
+    //clamp open
+    if (dec4 == LOW )
+    {
+      servoC.write(110);
+      delay(30);
+    }
+
+    dec1 = digitalRead(D1);
+    dec2 = digitalRead(D2);
+    dec3 = digitalRead(D3);
+    dec4 = digitalRead(D4);
+  }
+
 }
