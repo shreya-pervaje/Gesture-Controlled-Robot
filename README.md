@@ -12,4 +12,6 @@ The robot unit code "Robot_unit.c" code containing the instructions to the servo
 Gesture_unit.c: The gestures are read from sensors connected to the analog ports of Atmega 328p controller. The values from the sensors are caliberated to read the sensor value changes and are converted to the digital values using Analog to digital conversions with the help of prescalers. The values are further processed and are sent to RF transmitter using separate encoder unit.
 
 Robot_unit.c: At the robot unit, the code receives the values from decoder, which performed the received the values from RF receiver. The logic controls the movement of the robot and its clamper in the desired way.
+
+The overall working of logic is shown in the following flowchart. 
 ![image](https://github.com/shreya-pervaje/Gesture-Controlled-Robot/assets/151652737/6d735dd0-5959-4414-82df-00e4a244f3c5)
